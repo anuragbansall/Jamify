@@ -16,13 +16,13 @@ function MusicPlaylist({
           >
             <div className="h-16 w-16 shrink-0 bg-zinc-700 rounded-md overflow-hidden">
               <img
-                src={song.snippet.thumbnails.default.url}
+                src={song?.snippet?.thumbnails?.default?.url}
                 alt="Album cover"
                 className="h-full w-full object-cover"
               />
             </div>
             <div className="flex flex-col">
-              <h2 className="text-lg line-clamp-2">{song.snippet.title}</h2>
+              <h2 className="text-lg line-clamp-2">{song?.snippet?.title}</h2>
               <h3 className="text-sm">{song.artist}</h3>
             </div>
           </div>
