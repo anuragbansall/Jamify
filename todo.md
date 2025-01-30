@@ -22,3 +22,9 @@
 
 - Implement autoplay functionality so that when the current song ends, the next song starts automatically.
 - Ensure that once the current song finishes, it triggers a state update that selects the next song.
+
+## 5. Make it Responsive
+
+- Implement responsive design for the music player UI to ensure it works well on all screen sizes (desktop, tablet, mobile).
+- Use CSS media queries or utility-first CSS frameworks (e.g., Tailwind CSS) to adjust the layout and size of elements.
+- Optimize the music player controls and song details for smaller screen sizes.
