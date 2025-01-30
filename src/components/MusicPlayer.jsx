@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Play, Pause } from "lucide-react"; // Import Play/Pause icons
+import MusicControls from "./MusicControls";
 
-function MusicPlayer({ currentSong = null, setCurrentSong = () => {} }) {
+function MusicPlayer({
+  currentSong = null,
+  setCurrentSong = () => {},
+  playNextSong = () => {},
+  playPreviousSong = () => {},
+}) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const togglePlay = () => setIsPlaying(!isPlaying);
@@ -38,15 +44,12 @@ function MusicPlayer({ currentSong = null, setCurrentSong = () => {} }) {
             allow="autoplay"
           ></iframe>
         )}
-
-        {/* Music Controls */}
-        <button
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg flex items-center space-x-2"
-          onClick={togglePlay}
-        >
-          {isPlaying ? <Pause size={24} /> : <Play size={24} />}
-          <span>{isPlaying ? "Pause" : "Play"}</span>
-        </button>
+        <MusicControls
+          isPlaying={isPlaying}
+          togglePlay={togglePlay}
+          playNextSong={playNextSong}
+          playPreviousSong={playPreviousSong}
+        />
       </div>
     </div>
   );

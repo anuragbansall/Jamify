@@ -17,7 +17,7 @@ function App() {
     async function fetchPlaylist() {
       try {
         const response = await axios.get(API_URL);
-        console.log(response.data.items); // Verify the data structure
+        // console.log(response.data.items);
         setSongs(response.data.items || []);
         setCurrentSong(response.data.items[0] || null);
         setLoading(false);
@@ -30,6 +30,18 @@ function App() {
 
     fetchPlaylist();
   }, []);
+
+  const playNextSong = () => {
+    const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
+    const nextIndex = (currentIndex + 1) % songs.length;
+    setCurrentSong(songs[nextIndex]);
+  };
+
+  const playPreviousSong = () => {
+    const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
+    const previousIndex = (currentIndex - 1 + songs.length) % songs.length;
+    setCurrentSong(songs[previousIndex]);
+  };
 
   if (loading) {
     return (
@@ -49,7 +61,12 @@ function App() {
 
   return (
     <div className="h-screen w-full px-[8rem] py-[4rem] text-white flex justify-between items-center bg-gradient-to-r from-zinc-950 to-cyan-950">
-      <MusicPlayer currentSong={currentSong} setCurrentSong={setCurrentSong} />
+      <MusicPlayer
+        currentSong={currentSong}
+        setCurrentSong={setCurrentSong}
+        playNextSong={playNextSong}
+        playPreviousSong={playPreviousSong}
+      />
       <MusicPlaylist
         songs={songs}
         setCurrentSong={setCurrentSong}
