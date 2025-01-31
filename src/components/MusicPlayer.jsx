@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Play, Pause } from "lucide-react"; // Import Play/Pause icons
 import MusicControls from "./MusicControls";
-import axios from "axios";
+import convertToAudio from "../utils/convertToAudio";
 
 function MusicPlayer({
   currentSong = null,
@@ -14,8 +14,6 @@ function MusicPlayer({
   const audioRef = useRef(null);
   const [loading, setLoading] = useState(false);
 
-  const RAPIDAPI_KEY = import.meta.env.VITE_RAPIDAPI_KEY;
-
   const togglePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -27,33 +25,13 @@ function MusicPlayer({
     }
   };
 
-  const convertToAudio = async (videoId) => {
-    setLoading(true);
-    const options = {
-      method: "GET",
-      url: "https://youtube-mp36.p.rapidapi.com/dl",
-      params: { id: videoId },
-      headers: {
-        "x-rapidapi-key": RAPIDAPI_KEY,
-        "x-rapidapi-host": "youtube-mp36.p.rapidapi.com",
-      },
-    };
-
-    try {
-      const response = await axios.request(options);
-      if (response.data.status === "ok") {
-        setAudioUrl(response.data.link);
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     if (currentSong) {
-      convertToAudio(currentSong.snippet.resourceId.videoId);
+      convertToAudio(
+        currentSong.snippet.resourceId.videoId,
+        setLoading,
+        setAudioUrl
+      );
     }
   }, [currentSong]);
 
