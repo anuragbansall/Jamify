@@ -7,11 +7,16 @@ import { MdSkipNext } from "react-icons/md";
 function MusicControls({
   isPlaying,
   togglePlay,
+  loading,
   playNextSong = () => {},
   playPreviousSong = () => {},
 }) {
   return (
-    <div className="flex items-center space-x-4 mt-6">
+    <div
+      className={`flex items-center space-x-4 mt-6 ${
+        loading ? "pointer-events-none opacity-50" : ""
+      }`}
+    >
       <span
         className="text-white text-3xl cursor-pointer"
         onClick={playPreviousSong}

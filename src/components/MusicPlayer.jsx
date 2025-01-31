@@ -46,14 +46,14 @@ function MusicPlayer({
 
   return (
     <div className="max-w-full grow-1 flex flex-col items-center space-y-4">
-      <div className="h-[15rem] w-[15rem] md:h-[20rem] md:w-[20rem] max-w-full rounded-4xl overflow-hidden">
+      <div className="h-[80vw] w-[80vw] max-h-[20rem] max-w-[20rem] rounded-4xl overflow-hidden">
         <img
           src={
             currentSong?.snippet?.thumbnails?.high?.url ||
             "https://via.placeholder.com/300"
           }
           alt={currentSong?.snippet?.title || "Song Thumbnail"}
-          className="h-full w-full object-cover object-center"
+          className="h-full w-full object-cover object-center scale-150"
         />
       </div>
       <div className="flex flex-col items-center">
@@ -63,9 +63,6 @@ function MusicPlayer({
         <h3 className="text-xl">
           {currentSong?.snippet?.channelTitle || "Unknown Artist"}
         </h3>
-
-        {/* Loading Spinner */}
-        {loading && <div>Loading...</div>}
 
         {/* Hidden Audio Player */}
         {audioUrl && (
@@ -77,14 +74,13 @@ function MusicPlayer({
         )}
 
         {/* Music Controls */}
-        {audioUrl && !loading && (
-          <MusicControls
-            isPlaying={isPlaying}
-            togglePlay={togglePlay}
-            playNextSong={playNextSong}
-            playPreviousSong={playPreviousSong}
-          />
-        )}
+        <MusicControls
+          isPlaying={isPlaying}
+          togglePlay={togglePlay}
+          playNextSong={playNextSong}
+          playPreviousSong={playPreviousSong}
+          loading={loading}
+        />
       </div>
     </div>
   );
