@@ -6,7 +6,7 @@ function MusicPlaylist({
   currentSong = null,
 }) {
   return (
-    <div className="shrink-0 h-full w-1/3 bg-zinc-800 p-4 rounded-xl overflow-y-auto">
+    <div className="shrink-0 h-full w-full md:w-1/3 max-h-[90vh] bg-zinc-800 p-4 rounded-xl overflow-y-auto">
       <div className="flex flex-col gap-y-4">
         {songs.map((song, index) => (
           <div

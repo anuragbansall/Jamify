@@ -60,7 +60,7 @@ function App() {
   }
 
   return (
-    <div className="h-screen w-full px-[8rem] py-[4rem] text-white flex justify-between items-center bg-gradient-to-r from-zinc-950 to-cyan-950">
+    <div className="min-h-screen w-full p-4 text-white flex flex-col md:flex-row items-center gap-y-[3rem] bg-gradient-to-r from-zinc-950 to-cyan-950">
       <MusicPlayer
         currentSong={currentSong}
         setCurrentSong={setCurrentSong}

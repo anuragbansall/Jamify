@@ -45,8 +45,8 @@ function MusicPlayer({
   }, [audioUrl, isPlaying]);
 
   return (
-    <div className="flex flex-col items-center space-y-4">
-      <div className="h-[20rem] w-[20rem] rounded-4xl overflow-hidden">
+    <div className="max-w-full grow-1 flex flex-col items-center space-y-4">
+      <div className="h-[15rem] w-[15rem] md:h-[20rem] md:w-[20rem] max-w-full rounded-4xl overflow-hidden">
         <img
           src={
             currentSong?.snippet?.thumbnails?.high?.url ||
