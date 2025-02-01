@@ -22,7 +22,7 @@ function MusicPlaylist({
               <img
                 src={song?.snippet?.thumbnails?.default?.url}
                 alt="Album cover"
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover scale-150"
               />
             </div>
             <div className="flex flex-col">

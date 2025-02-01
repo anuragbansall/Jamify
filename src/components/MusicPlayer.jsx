@@ -26,6 +26,10 @@ function MusicPlayer({
     setLoading(false);
   };
 
+  const handleVideoEnds = () => {
+    playNextSong();
+  };
+
   const loadYouTubeIframeAPI = () => {
     if (!window.YT) {
       const script = document.createElement("script");
@@ -54,6 +58,8 @@ function MusicPlayer({
             setIsPlaying(true);
           } else if (event.data === window.YT.PlayerState.PAUSED) {
             setIsPlaying(false);
+          } else if (event.data === window.YT.PlayerState.ENDED) {
+            handleVideoEnds();
           }
         },
       },
@@ -80,7 +86,7 @@ function MusicPlayer({
             "https://via.placeholder.com/300"
           }
           alt={currentSong?.snippet?.title || "Song Thumbnail"}
-          className="h-full w-full object-cover object-center"
+          className="h-full w-full object-cover object-center scale-150"
         />
       </div>
       <div className="flex flex-col items-center">
@@ -95,7 +101,7 @@ function MusicPlayer({
         {currentSong && (
           <div
             ref={playerRef}
-            className="invisible w-0 h-0 absolute top-0 left-0 "
+            className="invisible w-0 h-0 absolute top-0 left-0"
           ></div>
         )}
 
