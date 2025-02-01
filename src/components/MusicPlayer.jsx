@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Play, Pause } from "lucide-react"; // Import Play/Pause icons
 import MusicControls from "./MusicControls";
-import convertToAudio from "../utils/convertToAudio";
 
 function MusicPlayer({
   currentSong = null,
@@ -10,50 +9,78 @@ function MusicPlayer({
   playPreviousSong = () => {},
 }) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [audioUrl, setAudioUrl] = useState(null);
-  const audioRef = useRef(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const playerRef = useRef(null);
+  const playerInstance = useRef(null);
 
   const togglePlay = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
+    if (isPlaying) {
+      playerInstance.current.pauseVideo();
+    } else {
+      playerInstance.current.playVideo();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const onPlayerReady = (event) => {
+    setLoading(false);
+  };
+
+  const loadYouTubeIframeAPI = () => {
+    if (!window.YT) {
+      const script = document.createElement("script");
+      script.src = "https://www.youtube.com/iframe_api";
+      script.async = true;
+      document.body.appendChild(script);
+      window.onYouTubeIframeAPIReady = () => {
+        createPlayer();
+      };
+    } else {
+      createPlayer();
     }
   };
 
-  useEffect(() => {
-    if (currentSong) {
-      convertToAudio(
-        currentSong.snippet.resourceId.videoId,
-        setLoading,
-        setAudioUrl
-      );
+  const createPlayer = () => {
+    if (playerInstance.current) {
+      playerInstance.current.destroy();
     }
+
+    playerInstance.current = new window.YT.Player(playerRef.current, {
+      videoId: currentSong?.snippet?.resourceId?.videoId,
+      events: {
+        onReady: onPlayerReady,
+        onStateChange: (event) => {
+          if (event.data === window.YT.PlayerState.PLAYING) {
+            setIsPlaying(true);
+          } else if (event.data === window.YT.PlayerState.PAUSED) {
+            setIsPlaying(false);
+          }
+        },
+      },
+    });
+  };
+
+  useEffect(() => {
+    loadYouTubeIframeAPI();
+    setLoading(true);
+    setIsPlaying(false);
+    return () => {
+      if (playerInstance.current) {
+        playerInstance.current.destroy();
+      }
+    };
   }, [currentSong]);
 
-  useEffect(() => {
-    if (audioUrl && audioRef.current) {
-      audioRef.current.src = audioUrl;
-      if (isPlaying) {
-        audioRef.current.play();
-      }
-    }
-  }, [audioUrl, isPlaying]);
-
   return (
-    <div className="max-w-full grow-1 flex flex-col items-center space-y-4">
-      <div className="h-[80vw] w-[80vw] max-h-[20rem] max-w-[20rem] rounded-4xl overflow-hidden">
+    <div className="flex grow-1 flex-col items-center space-y-4">
+      <div className="h-[20rem] w-[20rem] rounded-4xl overflow-hidden">
         <img
           src={
             currentSong?.snippet?.thumbnails?.high?.url ||
             "https://via.placeholder.com/300"
           }
           alt={currentSong?.snippet?.title || "Song Thumbnail"}
-          className="h-full w-full object-cover object-center scale-150"
+          className="h-full w-full object-cover object-center"
         />
       </div>
       <div className="flex flex-col items-center">
@@ -64,16 +91,14 @@ function MusicPlayer({
           {currentSong?.snippet?.channelTitle || "Unknown Artist"}
         </h3>
 
-        {/* Hidden Audio Player */}
-        {audioUrl && (
-          <audio
-            ref={audioRef}
-            onPause={() => setIsPlaying(false)}
-            onPlay={() => setIsPlaying(true)}
-          />
+        {/* YouTube Iframe Player */}
+        {currentSong && (
+          <div
+            ref={playerRef}
+            className="invisible w-0 h-0 absolute top-0 left-0 "
+          ></div>
         )}
 
-        {/* Music Controls */}
         <MusicControls
           isPlaying={isPlaying}
           togglePlay={togglePlay}
